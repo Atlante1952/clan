@@ -430,48 +430,49 @@ end
 function clans.handle_invitation(player, formname, fields)
     if formname == "invitation_interface" then
         if fields.invit_btn then
-            local player_name = player:get_player_name()
             local clan_name, is_leader = clans.get_player_clan(player)
-            if clan_name == "No Clan" then
-                minetest.chat_send_player(player_name, minetest.colorize(clans.message_color, "[Server] -!- You are not in a clan. You can create one or join one."))
+            if clan_name == "No clan" then
+                minetest.chat_send_player(player:get_player_name(), minetest.colorize(clans.message_color, "[Server] -!- You are not in a clan. You can create one or join one."))
                 return
             end
             if not is_leader then
-                minetest.chat_send_player(player_name, minetest.colorize(clans.message_color, "[Server] -!- Only the clan leader can invite players to the clan."))
+                minetest.chat_send_player(player:get_player_name(), minetest.colorize(clans.message_color, "[Server] -!- Only the clan leader can invite players to the clan."))
                 return
             end
             local invitation_message = fields.invit_field
-            if not invitation_message or invitation_message == "" then
-                minetest.chat_send_player(player_name, minetest.colorize(clans.message_color, "[Server] -!- You must specify a player to invite."))
+            local custom_message = fields.invit_msg or ""
+            if not invitation_message or invitation_message:trim() == "" then
+                minetest.chat_send_player(player:get_player_name(), minetest.colorize(clans.message_color, "[Server] -!- The invitation field cannot be empty."))
                 return
             end
-            local custom_message = fields.invit_msg or ""
+            if invitation_message == player:get_player_name() then
+                minetest.chat_send_player(player:get_player_name(), minetest.colorize(clans.message_color, "[Server] -!- You cannot invite yourself."))
+                return
+            end
             local file_path = minetest.get_worldpath() .. "/claninvitation.txt"
             local file = io.open(file_path, "r")
-            if not file then
-                return
-            end
-            for line in file:lines() do
-                if line:find("Clan: " .. clan_name .. ", Invited: " .. invitation_message) then
-                    minetest.chat_send_player(player_name, minetest.colorize(clans.message_color, "[Server] -!- This player has already been invited by the clan."))
-                    file:close()
-                    return
+            if file then
+                for line in file:lines() do
+                    if line:find("Clan: " .. clan_name .. ", Invited: " .. invitation_message) then
+                        minetest.chat_send_player(player:get_player_name(), minetest.colorize(clans.message_color, "[Server] -!- This player has already been invited by the clan."))
+                        file:close()
+                        return
+                    end
                 end
+                file:close()
             end
-            file:close()
             file = io.open(file_path, "a")
-            if not file then
-                minetest.log("error", "Failed to open file for appending: " .. file_path)
-                minetest.chat_send_player(player_name, minetest.colorize(clans.message_color, "[Server] -!- Failed to send invitation."))
-                return
+            if file then
+                file:write("Clan: " .. clan_name .. ", Invited: " .. invitation_message .. ", Message: " .. custom_message .. "\n")
+                file:close()
+                local invited_player = minetest.get_player_by_name(invitation_message)
+                if invited_player then
+                    minetest.chat_send_player(invitation_message, minetest.colorize(clans.message_color, "[Server] -!- You have received an invitation from the clan: " .. clan_name .. "."))
+                end
+                minetest.chat_send_player(player:get_player_name(), minetest.colorize(clans.message_color, "[Server] -!- Invitation sent successfully."))
+            else
+                minetest.chat_send_player(player:get_player_name(), minetest.colorize(clans.message_color, "[Server] -!- Failed to send invitation."))
             end
-            file:write("Clan: " .. clan_name .. ", Invited: " .. invitation_message .. ", Message: " .. custom_message .. "\n")
-            file:close()
-            local invited_player = minetest.get_player_by_name(invitation_message)
-            if invited_player then
-                minetest.chat_send_player(invitation_message, minetest.colorize(clans.message_color, "[Server] -!- You have received an invitation from the clan: " .. clan_name .. "."))
-            end
-            minetest.chat_send_player(player_name, minetest.colorize(clans.message_color, "[Server] -!- Invitation sent successfully."))
         end
     end
 end

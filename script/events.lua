@@ -26,13 +26,13 @@ end)
 
 
 function clans.handle_tabheader(player, formname, fields)
-    if formname == "clan_interface" then
-        if fields.clan_tab == "2" then
-            clans.show_invitation_interface(player)
-        end
-    elseif formname == "invitation_interface" then
-        if fields.clan_tab == "1" then
-            clans.show_clan_interface(player)
-        end
+    if fields.clan_tab == "2" then
+        clans.show_invitation_interface(player)
+    elseif fields.clan_tab == "1" then
+        clans.show_clan_interface(player)
+    elseif fields.clan_tab == "3" then
+        local name = player:get_player_name()
+        local player = minetest.get_player_by_name(name)
+        clans.show_chat_form(name)
     end
 end

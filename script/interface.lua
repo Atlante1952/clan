@@ -19,12 +19,12 @@ function clans.show_clan_interface(player)
         "button[0,8.35;2,1;leave;Leave the clan]" ..
         "style[delete;bgcolor=#202c37]" ..
         "button[6,8.35;2,1;delete;Delete Clan]" ..
-        "label[0,0;#Clan : " .. minetest.colorize("#3e6789", player_clan) .. "]" ..
-        "label[0,3.9;#Members of : " .. minetest.colorize("#3e6789", player_clan) .. " (" .. #members .. " Members)]" ..
-        "label[0,7.7;#Personal :" .. minetest.colorize("#3e6789", " About You") .. "]" ..
+        "label[0,0;#Clan : " .. minetest.colorize("#FF0000", player_clan) .. "]" ..
+        "label[0,3.9;#Members of : " .. minetest.colorize("#FF0000", player_clan) .. " (" .. #members .. " Members)]" ..
+        "label[0,7.7;#Personal :" .. minetest.colorize("#FF0000", " About You") .. "]" ..
         "label[0,0.6;List of all clans (" .. total_clans_count .. " Clans)]" ..
         "textlist[0,1;3.5,2.5;all_clans;" .. clan_list_text .. "]" ..
-        "tabheader[0,0;clan_tab;Clan,Invitation;1]"
+        "tabheader[0,0;clan_tab;Clan,Invitation, Discussion;1]"
 
     minetest.show_formspec(player:get_player_name(), "clan_interface", formspec)
 end
@@ -56,17 +56,17 @@ function clans.show_invitation_interface(player)
         "box[-0.1,3.75;8,0.7;black]" ..
         "box[-0.1,-0.1;8,9.4;#030303]" ..
         "textarea[0.35,1;3.5,2;invit_msg;;]" ..
-        "label[0,0;#Clan : " .. minetest.colorize("#3e6789", player_clan) .. "]" ..
+        "label[0,0;#Clan : " .. minetest.colorize("#FF0000", player_clan) .. "]" ..
         "label[0,0.65;Invitation Message]" ..
         "label[4,4.65;Message from the clan.]" ..
-        "label[0,3.9;#Personal : " .. minetest.colorize("#3e6789", "Your Inbox") .. " (You have received " .. invitations_count .. " requests)]" ..
+        "label[0,3.9;#Personal : " .. minetest.colorize("#FF0000", "Your Inbox") .. " (You have received " .. invitations_count .. " requests)]" ..
         "textlist[4,1;3.5,2.5;members_list;" .. table.concat(members, ",") .. "]" ..
         "textlist[0,4.75;3.5,2.5;invited_clans;" .. table.concat(invited_clans, ",") .. "]" ..
         "field[1.8,3.05;2,1;invit_field;;]" ..
         "button[0.05,8.2;1.5,1;join_clan;Join]" ..
         "field[1.8,8.5;2.35,1;join_clanf;Confirm Clan Name;]" ..
         "button[0.05,2.75;1.5,1;invit_btn;Invite]" ..
-        "tabheader[0,0;clan_tab;Clan,Invitation;2]"
+        "tabheader[0,0;clan_tab;Clan,Invitation, Discussion;2]"
 
     minetest.show_formspec(player:get_player_name(), "invitation_interface", formspec)
 end
@@ -78,17 +78,17 @@ function clans.show_invitation_formspec(player, player_clan, members, invited_cl
         "box[-0.1,3.75;8,0.7;black]" ..
         "box[-0.1,-0.1;8,9.4;#030303]" ..
         "textarea[0.35,1;3.5,2;invit_msg;;]" ..
-        "label[0,0;#Clan : " .. minetest.colorize("#3e6789", player_clan) .. "]" ..
+        "label[0,0;#Clan : " .. minetest.colorize("#FF0000", player_clan) .. "]" ..
         "label[0,0.65;Invitation Message]" ..
         "label[4,4.65;Message from the clan.]" ..
-        "label[0,3.9;#Personal : " .. minetest.colorize("#3e6789", "Your Inbox") .. " (You have received " .. invitations_count .. " requests)]" ..
+        "label[0,3.9;#Personal : " .. minetest.colorize("#FF0000", "Your Inbox") .. " (You have received " .. invitations_count .. " requests)]" ..
         "textlist[4,1;3.5,2.5;members_list;" .. table.concat(members, ",") .. "]" ..
         "textlist[0,4.75;3.5,2.5;invited_clans;" .. table.concat(invited_clans, ",") .. "]" ..
         "field[1.8,3.05;2,1;invit_field;;]" ..
         "button[0.05,2.75;1.5,1;invit_btn;Invite]" ..
         "button[0.05,8.2;1.5,1;join_clan;Join]" ..
         "field[1.8,8.5;2.35,1;join_clanf;Confirm Clan Name;]" ..
-        "tabheader[0,0;clan_tab;Clan,Invitation;2]" ..
+        "tabheader[0,0;clan_tab;Clan,Invitation, Discussion;2]" ..
         "hypertext[4.2,5.5;4.1,4;;" .. message .. "]"
 
     minetest.show_formspec(player_name, "invitation_interface", formspec)
