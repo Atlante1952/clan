@@ -3,9 +3,13 @@ function clans.get_clan_folder_path()
 end
 
 function clans.read_file(file_path)
+    local dir_path = file_path:match("(.+)/[^/]*$")
+    if dir_path and not minetest.mkdir(dir_path) then
+        minetest.log("error", "Failed to create directory: " .. dir_path)
+        return nil
+    end
     local file = io.open(file_path, "r")
     if not file then
-        minetest.log("error", "Failed to open file for reading: " .. file_path)
         return nil
     end
     local content = file:read("*all")
@@ -91,41 +95,33 @@ function clans.get_all_clans()
     local folder_path = clans.get_clan_folder_path()
     local clans = {}
     local dir_list = minetest.get_dir_list(folder_path, false)
-
     if not dir_list then
         minetest.log("error", "Failed to get directory list: " .. folder_path)
         return {}
     end
-
     for _, file_name in ipairs(dir_list) do
         local clan_name = file_name:sub(1, -5)
         table.insert(clans, clan_name)
     end
-
     return clans
 end
 
 function clans.get_total_clans_count()
     local folder_path = clans.get_clan_folder_path()
     local dir_list = minetest.get_dir_list(folder_path, false)
-
     if not dir_list then
         minetest.log("error", "Failed to get directory list: " .. folder_path)
         return 0
     end
-
     return #dir_list
 end
 
 function clans.read_invitations(file_path, player_name)
     local invited_clans = {}
     local file = io.open(file_path, "r")
-
     if not file then
-        minetest.log("error", "Failed to open file for reading: " .. file_path)
         return {}
     end
-
     for line in file:lines() do
         local clan_name, invited_player = line:match("Clan: (%w+), Invited: (%w+)")
         if invited_player == player_name then
@@ -133,7 +129,6 @@ function clans.read_invitations(file_path, player_name)
         end
     end
     file:close()
-
     return invited_clans
 end
 
@@ -160,7 +155,6 @@ function clans.handle_invitation_button(player, formname, fields)
 
                 local file = io.open(file_path, "r")
                 if not file then
-                    minetest.log("error", "Failed to open file for reading: " .. file_path)
                     return
                 end
 
@@ -197,7 +191,6 @@ function clans.handle_join_clan_button(player, formname, fields)
             local file_path = minetest.get_worldpath() .. "/claninvitation.txt"
             local file = io.open(file_path, "r")
             if not file then
-                minetest.log("error", "Failed to open file for reading: " .. file_path)
                 minetest.chat_send_player(player_name, minetest.colorize(clans.message_color, "[Server] -!- Failed to open clan invitation file. Please try again."))
                 return
             end
@@ -482,7 +475,6 @@ function clans.handle_invitation(player, formname, fields)
             local file_path = minetest.get_worldpath() .. "/claninvitation.txt"
             local file = io.open(file_path, "r")
             if not file then
-                minetest.log("error", "Failed to open file for reading: " .. file_path)
                 return
             end
 
