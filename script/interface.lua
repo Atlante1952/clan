@@ -25,7 +25,6 @@ function clans.show_clan_interface(player)
         "label[0,0.6;List of all clans (" .. total_clans_count .. " Clans)]" ..
         "textlist[0,1;3.5,2.5;all_clans;" .. clan_list_text .. "]" ..
         "tabheader[0,0;clan_tab;Clan,Invitation, Discussion;1]"
-
     minetest.show_formspec(player:get_player_name(), "clan_interface", formspec)
 end
 

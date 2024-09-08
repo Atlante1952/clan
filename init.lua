@@ -24,6 +24,7 @@ if clans.modpath then
         "script/interface.lua",
         "script/unified_inventory.lua",
         "script/chat.lua",
+        "script/claims.lua",
     }
     for _, file in ipairs(files_to_load) do
         clans.load_file(clans.modpath .. "/" .. file)
